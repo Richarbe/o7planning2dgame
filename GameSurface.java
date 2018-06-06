@@ -15,6 +15,7 @@ import android.view.SurfaceView;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
 
@@ -30,9 +31,14 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
     private boolean soundPoolLoaded;
     private SoundPool soundPool;
 
-    public GameSurface(Context context) {
+    private int chibiNum; //number of chibis
+    private Random randomNumberGenerator;
+
+    public GameSurface(Context context, int chibiNum) {
         super(context);
 
+        this.chibiNum = chibiNum;
+        randomNumberGenerator = new Random();
         //Make Game Surface focusable so it can handle events.
         this.setFocusable(true);
 
@@ -168,6 +174,22 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
+
+        Bitmap chibiBitmap1 = BitmapFactory.decodeResource(this.getResources(), R.drawable.chibi1);
+        Bitmap chibiBitmap2 = BitmapFactory.decodeResource(this.getResources(), R.drawable.chibi2);
+
+        for(int i = 0; i < chibiNum; i++) {
+            ChibiCharacter chibi;
+            if (randomNumberGenerator.nextBoolean()) {
+                chibi = new ChibiCharacter(this, chibiBitmap1, 100, 50);
+            } else {
+                chibi = new ChibiCharacter(this, chibiBitmap2, 100, 50);
+            }
+            chibi.setMovingVector(randomNumberGenerator.nextInt(20) - 10,
+                    randomNumberGenerator.nextInt(20) - 10);
+            this.chibiList.add(chibi);
+        }
+        /*
         Bitmap chibiBitmap1 = BitmapFactory.decodeResource(this.getResources(), R.drawable.chibi1);
         ChibiCharacter chibi1 = new ChibiCharacter(this, chibiBitmap1, 100, 50);
 
@@ -177,6 +199,7 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
         this.chibiList.add(chibi1);
         this.chibiList.add(chibi2);
 
+        */
         this.gameThread = new GameThread(this, holder);
         this.gameThread.setRunning(true);
         this.gameThread.start();
