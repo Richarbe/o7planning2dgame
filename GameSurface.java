@@ -229,6 +229,7 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
 
                 //Parent thread must wait until the end of GameThread.
                 this.gameThread.join();
+                this.soundPool.release();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
