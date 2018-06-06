@@ -133,6 +133,7 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
 
             Iterator<ChibiCharacter> iterator= this.chibiList.iterator();
 
+            boolean explosionOccurred = false;
             while(iterator.hasNext()) {
                 ChibiCharacter chibi = iterator.next();
                 if( chibi.getX() < x && x < chibi.getX() + chibi.getWidth()
@@ -142,15 +143,19 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
 
                     //Create Explosion object
                     Bitmap bitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.explosion);
-                    Explosion explosion = new Explosion(this, bitmap, chibi.getX(), chibi.getY());
+                    Explosion explosion = new Explosion(this, bitmap, chibi.getCenterX(), chibi.getCenterY());
 
                     this.explosionList.add(explosion);
+                    explosionOccurred = true;
                 }
             }
-            for (ChibiCharacter chibi: chibiList) {
-                int movingVectorX = x - chibi.getX();
-                int movingVectorY = y - chibi.getY();
-                chibi.setMovingVector(movingVectorX, movingVectorY);
+
+            if(!explosionOccurred) {
+                for (ChibiCharacter chibi : chibiList) {
+                    int movingVectorX = x - chibi.getX();
+                    int movingVectorY = y - chibi.getY();
+                    chibi.setMovingVector(movingVectorX, movingVectorY);
+                }
             }
             return true;
         }
@@ -181,9 +186,9 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback{
         for(int i = 0; i < chibiNum; i++) {
             ChibiCharacter chibi;
             if (randomNumberGenerator.nextBoolean()) {
-                chibi = new ChibiCharacter(this, chibiBitmap1, 100, 50);
+                chibi = new ChibiCharacter(this, chibiBitmap1, 300, 250);
             } else {
-                chibi = new ChibiCharacter(this, chibiBitmap2, 100, 50);
+                chibi = new ChibiCharacter(this, chibiBitmap2, 300, 250);
             }
             chibi.setMovingVector(randomNumberGenerator.nextInt(20) - 10,
                     randomNumberGenerator.nextInt(20) - 10);

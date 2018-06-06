@@ -24,14 +24,14 @@ public abstract class GameObject {
         this.rowCount = rowCount;
         this.colCount = colCount;
 
-        this.x = x;
-        this.y = y;
-
         this.WIDTH = image.getWidth();
         this.HEIGHT = image.getHeight();
 
         this.width = this.WIDTH/ colCount;
         this.height = this.HEIGHT/ rowCount;
+
+        this.setCenterX(x);
+        this.setCenterY(y);
     }
 
     protected Bitmap createSubImageAt(int row, int col) {
@@ -55,5 +55,13 @@ public abstract class GameObject {
     public int getWidth() {
         return width;
     }
+
+    public int getCenterX() { return (this.x + this.width/2); }
+
+    public int getCenterY() { return (this.y + this.height/2); }
+
+    public void setCenterX(int centerX) { this.x = centerX - this.width/2; }
+
+    public void setCenterY(int centerY) { this.y = centerY - this.height/2; }
 
 }
